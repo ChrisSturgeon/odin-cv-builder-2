@@ -27,6 +27,11 @@ class App extends Component {
     this.onPrevWorkEdit = this.onPrevWorkEdit.bind(this);
 
     this.state = {
+      edits: {
+        name: false,
+        profile: false,
+        work: false,
+      },
       name: {
         temp: '',
         saved: '',
@@ -45,6 +50,14 @@ class App extends Component {
       },
       workHistory: [],
       profileCounter: 0,
+      education: {
+        school: '',
+        studied: '',
+        from: '',
+        to: '',
+      },
+      educationHistory: [],
+      educationCounter: [],
     };
   }
 
@@ -58,7 +71,10 @@ class App extends Component {
 
   onNameSubmit(event) {
     event.preventDefault();
+    const edits = this.state.edits;
+    edits.name = false;
     this.setState({
+      edits: edits,
       name: {
         saved: this.state.name.temp,
         temp: '',
@@ -68,12 +84,15 @@ class App extends Component {
 
   onNameEdit(event) {
     event.preventDefault();
-    const edits = this.state.edits;
-    const editName = this.state.name;
-    editName.temp = this.state.name.saved;
-    this.setState({
-      edit: edits,
-      name: editName,
+    let edits = this.state.edits;
+    edits.name = true;
+
+    this.setState({ edits: edits }, () => {
+      const editName = this.state.name;
+      editName.temp = this.state.name.saved;
+      this.setState({
+        name: editName,
+      });
     });
   }
 
@@ -85,7 +104,11 @@ class App extends Component {
 
   onProfileSubmit(event) {
     event.preventDefault();
+    let edits = this.state.edits;
+    edits.profile = false;
+
     this.setState({
+      edits: edits,
       profile: {
         saved: this.state.profile.temp,
         temp: '',
@@ -95,17 +118,21 @@ class App extends Component {
 
   onProfileEdit(event) {
     event.preventDefault();
-    const profileEdit = this.state.profile;
-    profileEdit.temp = this.state.profile.saved;
-    this.setState({
-      profile: profileEdit,
+    let edits = this.state.edits;
+    edits.profile = true;
+
+    this.setState({ edits: edits }, () => {
+      const profileEdit = this.state.profile;
+      profileEdit.temp = this.state.profile.saved;
+      this.setState({
+        profile: profileEdit,
+      });
     });
   }
 
   handleWorkChange(event) {
     const name = event.target.name;
     let revisedInputs = this.state.work;
-
     switch (name) {
       case 'company':
         revisedInputs.company = event.target.value;
@@ -133,7 +160,6 @@ class App extends Component {
 
   onWorkSubmit(event) {
     event.preventDefault();
-
     this.setState({
       workHistory: this.state.workHistory.concat(this.state.work),
       work: {
@@ -149,27 +175,36 @@ class App extends Component {
 
   onWorkEdit(event) {
     event.preventDefault();
+
     if (this.state.workHistory.length > 0) {
-      const role = this.state.workHistory[this.state.profileCounter];
-      this.setState({
-        work: {
-          company: role.company,
-          position: role.position,
-          from: role.from,
-          to: role.to,
-          description: role.description,
-          id: role.id,
-        },
+      let edits = this.state.edits;
+      edits.work = true;
+
+      this.setState({ edits: edits }, () => {
+        const role = this.state.workHistory[this.state.profileCounter];
+        this.setState({
+          work: {
+            company: role.company,
+            position: role.position,
+            from: role.from,
+            to: role.to,
+            description: role.description,
+            id: role.id,
+          },
+        });
       });
     }
   }
 
   onWorkEditSave(event) {
     event.preventDefault();
+    let edits = this.state.edits;
+    edits.work = false;
     const editedRole = this.state.work;
     const revisedHistory = this.state.workHistory;
     revisedHistory.splice(this.state.profileCounter, 1, editedRole);
     this.setState({
+      edits: edits,
       workHistory: revisedHistory,
       work: {
         company: '',
@@ -228,6 +263,8 @@ class App extends Component {
           <div className="all-inputs">
             <h3>Personal Info.</h3>
             <PersonalForm
+              completed={this.state.name.saved}
+              editActive={this.state.edits.name}
               submitting={this.onNameSubmit}
               changing={this.handleNameChange}
               name={this.state.name.temp}
@@ -235,6 +272,8 @@ class App extends Component {
             />
             <h3>Summary</h3>
             <ProfileForm
+              completed={this.state.profile.saved}
+              editActive={this.state.edits.profile}
               submitting={this.onProfileSubmit}
               changing={this.handleProfileChange}
               editing={this.onProfileEdit}
@@ -242,6 +281,8 @@ class App extends Component {
             />
             <h3>Work Experience</h3>
             <WorkForm
+              length={this.state.workHistory.length}
+              editActive={this.state.edits.work}
               submitting={this.onWorkSubmit}
               changing={this.handleWorkChange}
               current={this.state.work}
