@@ -5,10 +5,13 @@ import uniqid from 'uniqid';
 import Name from '../src/components/Name';
 import Profile from '../src/components/Profile';
 import Work from '../src/components/Work';
+import PersonalForm from './components/PersonalForm';
+import ProfileForm from './components/ProfileForm';
+import WorkForm from './components/WorkForm';
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.handleNameChange = this.handleNameChange.bind(this);
     this.onNameSubmit = this.onNameSubmit.bind(this);
@@ -18,6 +21,10 @@ class App extends Component {
     this.onProfileEdit = this.onProfileEdit.bind(this);
     this.handleWorkChange = this.handleWorkChange.bind(this);
     this.onWorkSubmit = this.onWorkSubmit.bind(this);
+    this.onWorkEdit = this.onWorkEdit.bind(this);
+    this.onWorkEditSave = this.onWorkEditSave.bind(this);
+    this.onNextWorkEdit = this.onNextWorkEdit.bind(this);
+    this.onPrevWorkEdit = this.onPrevWorkEdit.bind(this);
 
     this.state = {
       name: {
@@ -29,10 +36,7 @@ class App extends Component {
         saved: '',
       },
       work: {
-        company: {
-          temp: '',
-          saved: '',
-        },
+        company: '',
         position: '',
         from: '',
         to: '',
@@ -40,6 +44,7 @@ class App extends Component {
         id: uniqid(),
       },
       workHistory: [],
+      profileCounter: 0,
     };
   }
 
@@ -63,9 +68,11 @@ class App extends Component {
 
   onNameEdit(event) {
     event.preventDefault();
+    const edits = this.state.edits;
     const editName = this.state.name;
     editName.temp = this.state.name.saved;
     this.setState({
+      edit: edits,
       name: editName,
     });
   }
@@ -101,7 +108,7 @@ class App extends Component {
 
     switch (name) {
       case 'company':
-        revisedInputs.company.temp = event.target.value;
+        revisedInputs.company = event.target.value;
         break;
       case 'position':
         revisedInputs.position = event.target.value;
@@ -142,6 +149,75 @@ class App extends Component {
 
   onWorkEdit(event) {
     event.preventDefault();
+    if (this.state.workHistory.length > 0) {
+      const role = this.state.workHistory[this.state.profileCounter];
+      this.setState({
+        work: {
+          company: role.company,
+          position: role.position,
+          from: role.from,
+          to: role.to,
+          description: role.description,
+          id: role.id,
+        },
+      });
+    }
+  }
+
+  onWorkEditSave(event) {
+    event.preventDefault();
+    const editedRole = this.state.work;
+    const revisedHistory = this.state.workHistory;
+    revisedHistory.splice(this.state.profileCounter, 1, editedRole);
+    this.setState({
+      workHistory: revisedHistory,
+      work: {
+        company: '',
+        position: '',
+        from: '',
+        to: '',
+        description: '',
+        id: uniqid(),
+      },
+    });
+  }
+
+  onNextWorkEdit(event) {
+    event.preventDefault();
+    if (this.state.profileCounter < this.state.workHistory.length - 1) {
+      this.setState({ profileCounter: this.state.profileCounter + 1 }, () => {
+        const role = this.state.workHistory[this.state.profileCounter];
+        this.setState({
+          work: {
+            company: role.company,
+            position: role.position,
+            from: role.from,
+            to: role.to,
+            description: role.description,
+            id: role.id,
+          },
+        });
+      });
+    }
+  }
+
+  onPrevWorkEdit(event) {
+    event.preventDefault();
+    if (this.state.profileCounter >= 1) {
+      this.setState({ profileCounter: this.state.profileCounter - 1 }, () => {
+        const role = this.state.workHistory[this.state.profileCounter];
+        this.setState({
+          work: {
+            company: role.company,
+            position: role.position,
+            from: role.from,
+            to: role.to,
+            description: role.description,
+            id: role.id,
+          },
+        });
+      });
+    }
   }
 
   render() {
@@ -151,76 +227,29 @@ class App extends Component {
           <h1>CV Builder</h1>
           <div className="all-inputs">
             <h3>Personal Info.</h3>
-            <form onSubmit={this.onNameSubmit}>
-              <label htmlFor="nameInput">Name</label>
-              <input
-                value={this.state.name.temp}
-                onChange={this.handleNameChange}
-                type="text"
-                id="nameInput"
-                placeholder="e.g. John Doe..."
-                required
-              ></input>
-              <button type="submit">Save</button>
-              <button onClick={this.onNameEdit}>Edit</button>
-            </form>
+            <PersonalForm
+              submitting={this.onNameSubmit}
+              changing={this.handleNameChange}
+              name={this.state.name.temp}
+              editing={this.onNameEdit}
+            />
             <h3>Summary</h3>
-            <form onSubmit={this.onProfileSubmit}>
-              <label htmlFor="profileText">Profile Text</label>
-              <textarea
-                value={this.state.profile.temp}
-                id="profileText"
-                onChange={this.handleProfileChange}
-                placeholder="A brief introduction to outline your attributes, qualities and work experience..."
-              ></textarea>
-              <button type="submit">Save</button>
-              <button onClick={this.onProfileEdit}>Edit</button>
-            </form>
+            <ProfileForm
+              submitting={this.onProfileSubmit}
+              changing={this.handleProfileChange}
+              editing={this.onProfileEdit}
+              text={this.state.profile.temp}
+            />
             <h3>Work Experience</h3>
-            <form onSubmit={this.onWorkSubmit}>
-              <label htmlFor="company">Company</label>
-              <input
-                value={this.state.work.company.temp}
-                onChange={this.handleWorkChange}
-                name="company"
-                id="company"
-                type="text"
-                required
-              ></input>
-              <label htmlFor="position">Position</label>
-              <input
-                value={this.state.work.position}
-                onChange={this.handleWorkChange}
-                name="position"
-                id="position"
-                type="text"
-                required
-              ></input>
-              <label htmlFor="startDate">From</label>
-              <input
-                value={this.state.work.from}
-                onChange={this.handleWorkChange}
-                name="from"
-                type="month"
-                required
-              ></input>
-              <label htmlFor="startDate">To</label>
-              <input
-                value={this.state.work.to}
-                onChange={this.handleWorkChange}
-                name="to"
-                type="month"
-              ></input>
-              <label htmlFor="roleDescription">Description</label>
-              <textarea
-                value={this.state.work.description}
-                id="roleDescription"
-                onChange={this.handleWorkChange}
-                name="description"
-                placeholder="An overview of the role, including main tasks... "
-              ></textarea>
-              <button type="submit">Add</button>
-            </form>
+            <WorkForm
+              submitting={this.onWorkSubmit}
+              changing={this.handleWorkChange}
+              current={this.state.work}
+              editing={this.onWorkEdit}
+              nextEdit={this.onNextWorkEdit}
+              prevEdit={this.onPrevWorkEdit}
+              saveEdit={this.onWorkEditSave}
+            />
           </div>
         </div>
         <div className="display">
