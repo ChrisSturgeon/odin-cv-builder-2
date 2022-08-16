@@ -8,6 +8,8 @@ import Work from '../src/components/Work';
 import PersonalForm from './components/PersonalForm';
 import ProfileForm from './components/ProfileForm';
 import WorkForm from './components/WorkForm';
+import EducationForm from './components/EducationForm';
+import Education from './components/Education';
 
 class App extends Component {
   constructor(props) {
@@ -19,6 +21,7 @@ class App extends Component {
     this.handleProfileChange = this.handleProfileChange.bind(this);
     this.onProfileSubmit = this.onProfileSubmit.bind(this);
     this.onProfileEdit = this.onProfileEdit.bind(this);
+
     this.handleWorkChange = this.handleWorkChange.bind(this);
     this.onWorkSubmit = this.onWorkSubmit.bind(this);
     this.onWorkEdit = this.onWorkEdit.bind(this);
@@ -26,11 +29,19 @@ class App extends Component {
     this.onNextWorkEdit = this.onNextWorkEdit.bind(this);
     this.onPrevWorkEdit = this.onPrevWorkEdit.bind(this);
 
+    this.handleSchoolChange = this.handleSchoolChange.bind(this);
+    this.onEducationEdit = this.onEducationEdit.bind(this);
+    this.onEducationSubmit = this.onEducationSubmit.bind(this);
+    this.onNextEducationEdit = this.onNextEducationEdit.bind(this);
+    this.onPrevEducationEdit = this.onPrevEducationEdit.bind(this);
+    this.onEducationEditSave = this.onEducationEditSave.bind(this);
+
     this.state = {
       edits: {
         name: false,
         profile: false,
         work: false,
+        education: false,
       },
       name: {
         temp: '',
@@ -52,12 +63,15 @@ class App extends Component {
       profileCounter: 0,
       education: {
         school: '',
+        level: '',
         studied: '',
         from: '',
         to: '',
+        grade: '',
+        id: uniqid(),
       },
       educationHistory: [],
-      educationCounter: [],
+      educationCounter: 0,
     };
   }
 
@@ -175,7 +189,7 @@ class App extends Component {
 
   onWorkEdit(event) {
     event.preventDefault();
-
+    console.log('dog');
     if (this.state.workHistory.length > 0) {
       let edits = this.state.edits;
       edits.work = true;
@@ -255,13 +269,146 @@ class App extends Component {
     }
   }
 
+  handleSchoolChange(event) {
+    const name = event.target.name;
+    let revisedInputs = this.state.education;
+    switch (name) {
+      case 'school':
+        revisedInputs.school = event.target.value;
+        break;
+      case 'level':
+        revisedInputs.level = event.target.value;
+        break;
+      case 'from':
+        revisedInputs.from = event.target.value;
+        break;
+      case 'to':
+        revisedInputs.to = event.target.value;
+        break;
+      case 'grade':
+        revisedInputs.grade = event.target.value;
+        break;
+      default:
+        console.log('default');
+    }
+
+    this.setState({
+      education: revisedInputs,
+    });
+  }
+
+  onEducationSubmit(event) {
+    event.preventDefault();
+    this.setState({
+      educationHistory: this.state.educationHistory.concat(
+        this.state.education
+      ),
+      education: {
+        school: '',
+        level: '',
+        from: '',
+        to: '',
+        grade: '',
+        id: uniqid(),
+      },
+    });
+  }
+
+  onEducationEdit(event) {
+    event.preventDefault();
+
+    if (this.state.educationHistory.length > 0) {
+      let edits = this.state.edits;
+      edits.education = true;
+
+      this.setState({ edits: edits }, () => {
+        const inst = this.state.educationHistory[this.state.educationCounter];
+        this.setState({
+          education: {
+            school: inst.school,
+            level: inst.level,
+            from: inst.from,
+            to: inst.to,
+            grade: inst.grade,
+            id: inst.id,
+          },
+        });
+      });
+    }
+  }
+
+  onNextEducationEdit(event) {
+    event.preventDefault();
+    if (this.state.educationCounter < this.state.educationHistory.length - 1) {
+      this.setState(
+        { educationCounter: this.state.educationCounter + 1 },
+        () => {
+          const inst = this.state.educationHistory[this.state.educationCounter];
+          this.setState({
+            education: {
+              school: inst.school,
+              level: inst.level,
+              from: inst.from,
+              to: inst.to,
+              grade: inst.grade,
+              id: inst.id,
+            },
+          });
+        }
+      );
+    }
+  }
+
+  onPrevEducationEdit(event) {
+    event.preventDefault();
+    if (this.state.educationCounter >= 1) {
+      this.setState(
+        { educationCounter: this.state.educationCounter - 1 },
+        () => {
+          const inst = this.state.educationHistory[this.state.educationCounter];
+          this.setState({
+            education: {
+              school: inst.school,
+              level: inst.level,
+              from: inst.from,
+              to: inst.to,
+              grade: inst.grade,
+              id: inst.id,
+            },
+          });
+        }
+      );
+    }
+  }
+
+  onEducationEditSave(event) {
+    event.preventDefault();
+    let edits = this.state.edits;
+    edits.education = false;
+    const editedInst = this.state.education;
+    const revisedHistory = this.state.educationHistory;
+    revisedHistory.splice(this.state.educationCounter, 1, editedInst);
+    this.setState({
+      edits: edits,
+      educationHistory: revisedHistory,
+      education: {
+        school: '',
+        level: '',
+        from: '',
+        to: '',
+        grade: '',
+        id: uniqid(),
+      },
+    });
+  }
+
   render() {
     return (
       <div className="wrapper">
         <div className="inputs">
           <h1>CV Builder</h1>
           <div className="all-inputs">
-            <h3>Personal Info.</h3>
+            <h3>Name</h3>
             <PersonalForm
               completed={this.state.name.saved}
               editActive={this.state.edits.name}
@@ -270,7 +417,7 @@ class App extends Component {
               name={this.state.name.temp}
               editing={this.onNameEdit}
             />
-            <h3>Summary</h3>
+            <h3>Personal Profile</h3>
             <ProfileForm
               completed={this.state.profile.saved}
               editActive={this.state.edits.profile}
@@ -279,7 +426,7 @@ class App extends Component {
               editing={this.onProfileEdit}
               text={this.state.profile.temp}
             />
-            <h3>Work Experience</h3>
+            <h3>Work History</h3>
             <WorkForm
               length={this.state.workHistory.length}
               editActive={this.state.edits.work}
@@ -290,6 +437,17 @@ class App extends Component {
               nextEdit={this.onNextWorkEdit}
               prevEdit={this.onPrevWorkEdit}
               saveEdit={this.onWorkEditSave}
+            />
+            <EducationForm
+              length={this.state.educationHistory.length}
+              changing={this.handleSchoolChange}
+              editActive={this.state.edits.education}
+              current={this.state.education}
+              editing={this.onEducationEdit}
+              submitting={this.onEducationSubmit}
+              nextEdit={this.onNextEducationEdit}
+              prevEdit={this.onPrevEducationEdit}
+              saveEdit={this.onEducationEditSave}
             />
           </div>
         </div>
@@ -302,7 +460,7 @@ class App extends Component {
               <Work roles={this.state.workHistory} />
             </div>
             <div className="right-col">
-              <p>Hiya</p>
+              <Education roles={this.state.educationHistory} />
             </div>
           </div>
         </div>

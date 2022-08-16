@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
 
-class WorkForm extends Component {
+class EducationForm extends Component {
   render() {
     if (this.props.length === 0) {
       return (
         <form onSubmit={this.props.submitting}>
-          <label htmlFor="company">Company</label>
+          <label htmlFor="school">School</label>
           <input
-            value={this.props.current.company}
+            value={this.props.current.school}
             onChange={this.props.changing}
-            name="company"
-            id="company"
+            name="school"
+            id="school"
             type="text"
             required
           ></input>
-          <label htmlFor="position">Position</label>
+          <label htmlFor="level">Level</label>
           <input
-            value={this.props.current.position}
+            value={this.props.current.level}
             onChange={this.props.changing}
-            name="position"
-            id="position"
+            name="level"
+            id="level"
             type="text"
             required
           ></input>
@@ -38,35 +38,34 @@ class WorkForm extends Component {
             name="to"
             type="month"
           ></input>
-          <label htmlFor="roleDescription">Description</label>
-          <textarea
-            value={this.props.current.description}
-            id="roleDescription"
+          <label htmlFor="grade">Grade</label>
+          <input
+            value={this.props.current.grade}
+            id="grade"
             onChange={this.props.changing}
-            name="description"
-            placeholder="An overview of the role, including main tasks... "
-          ></textarea>
+            name="grade"
+          ></input>
           <button type="submit">Add New</button>
         </form>
       );
     } else if (this.props.length > 0 && this.props.editActive) {
       return (
         <form onSubmit={this.props.submitting}>
-          <label htmlFor="company">Company</label>
+          <label htmlFor="school">School</label>
           <input
-            value={this.props.current.company}
+            value={this.props.current.school}
             onChange={this.props.changing}
-            name="company"
-            id="company"
+            name="school"
+            id="school"
             type="text"
             required
           ></input>
-          <label htmlFor="position">Position</label>
+          <label htmlFor="level">Level</label>
           <input
-            value={this.props.current.position}
+            value={this.props.current.level}
             onChange={this.props.changing}
-            name="position"
-            id="position"
+            name="level"
+            id="level"
             type="text"
             required
           ></input>
@@ -85,37 +84,36 @@ class WorkForm extends Component {
             name="to"
             type="month"
           ></input>
-          <label htmlFor="roleDescription">Description</label>
-          <textarea
-            value={this.props.current.description}
-            id="roleDescription"
+          <label htmlFor="grade">Grade</label>
+          <input
+            value={this.props.current.grade}
+            id="grade"
             onChange={this.props.changing}
-            name="description"
-            placeholder="An overview of the role, including main tasks... "
-          ></textarea>
-          <button onClick={this.props.nextEdit}>Next Role</button>
-          <button onClick={this.props.prevEdit}>Previous Role</button>
+            name="grade"
+          ></input>
+          <button onClick={this.props.nextEdit}>Next School</button>
+          <button onClick={this.props.prevEdit}>Previous School</button>
           <button onClick={this.props.saveEdit}>Save Edit</button>
         </form>
       );
     }
     return (
       <form onSubmit={this.props.submitting}>
-        <label htmlFor="company">Company</label>
+        <label htmlFor="school">School</label>
         <input
-          value={this.props.current.company}
+          value={this.props.current.school}
           onChange={this.props.changing}
-          name="company"
-          id="company"
+          name="school"
+          id="school"
           type="text"
           required
         ></input>
-        <label htmlFor="position">Position</label>
+        <label htmlFor="level">Level</label>
         <input
-          value={this.props.current.position}
+          value={this.props.current.level}
           onChange={this.props.changing}
-          name="position"
-          id="position"
+          name="level"
+          id="level"
           type="text"
           required
         ></input>
@@ -134,14 +132,13 @@ class WorkForm extends Component {
           name="to"
           type="month"
         ></input>
-        <label htmlFor="roleDescription">Description</label>
-        <textarea
-          value={this.props.current.description}
-          id="roleDescription"
+        <label htmlFor="grade">Grade</label>
+        <input
+          value={this.props.current.grade}
+          id="grade"
           onChange={this.props.changing}
-          name="description"
-          placeholder="An overview of the role, including main tasks... "
-        ></textarea>
+          name="grade"
+        ></input>
         <button type="submit">Add Another</button>
         <button onClick={this.props.editing}>Edit existing</button>
       </form>
@@ -149,4 +146,4 @@ class WorkForm extends Component {
   }
 }
 
-export default WorkForm;
+export default EducationForm;
