@@ -10,6 +10,8 @@ import ProfileForm from './components/ProfileForm';
 import WorkForm from './components/WorkForm';
 import EducationForm from './components/EducationForm';
 import Education from './components/Education';
+import ContactForm from './components/ContactForm';
+import Contact from './components/Contact';
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +20,11 @@ class App extends Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.onNameSubmit = this.onNameSubmit.bind(this);
     this.onNameEdit = this.onNameEdit.bind(this);
+
+    this.handleContactChange = this.handleContactChange.bind(this);
+    this.onContactSubmit = this.onContactSubmit.bind(this);
+    this.onContactEdit = this.onContactEdit.bind(this);
+
     this.handleProfileChange = this.handleProfileChange.bind(this);
     this.onProfileSubmit = this.onProfileSubmit.bind(this);
     this.onProfileEdit = this.onProfileEdit.bind(this);
@@ -39,6 +46,7 @@ class App extends Component {
     this.state = {
       edits: {
         name: false,
+        contact: false,
         profile: false,
         work: false,
         education: false,
@@ -46,6 +54,25 @@ class App extends Component {
       name: {
         temp: '',
         saved: '',
+      },
+      contact: {
+        tel: {
+          temp: '',
+          saved: '',
+        },
+        email: {
+          temp: '',
+          saved: '',
+        },
+        location: {
+          temp: '',
+          saved: '',
+        },
+        website: {
+          temp: '',
+          saved: '',
+        },
+        completed: false,
       },
       profile: {
         temp: '',
@@ -107,6 +134,70 @@ class App extends Component {
       this.setState({
         name: editName,
       });
+    });
+  }
+
+  handleContactChange(event) {
+    const name = event.target.name;
+    let revisedInputs = this.state.contact;
+    switch (name) {
+      case 'tel':
+        revisedInputs.tel.temp = event.target.value;
+        break;
+      case 'email':
+        revisedInputs.email.temp = event.target.value;
+        break;
+      case 'location':
+        revisedInputs.location.temp = event.target.value;
+        break;
+      case 'website':
+        revisedInputs.website.temp = event.target.value;
+        break;
+      default:
+        console.log('default');
+    }
+
+    this.setState({
+      contact: revisedInputs,
+    });
+  }
+
+  onContactSubmit(event) {
+    event.preventDefault();
+    let edits = this.state.edits;
+    edits.contact = false;
+    let savedContact = this.state.contact;
+    savedContact.tel.saved = this.state.contact.tel.temp;
+    savedContact.tel.temp = '';
+    savedContact.email.saved = this.state.contact.email.temp;
+    savedContact.email.temp = '';
+    savedContact.location.saved = this.state.contact.location.temp;
+    savedContact.location.temp = '';
+    savedContact.website.saved = this.state.contact.website.temp;
+    savedContact.website.temp = '';
+    savedContact.completed = true;
+
+    this.setState({
+      edits: edits,
+      contact: savedContact,
+    });
+  }
+
+  onContactEdit(event) {
+    event.preventDefault();
+    let edits = this.state.edits;
+    edits.contact = true;
+
+    let savedContact = this.state.contact;
+    savedContact.tel.temp = this.state.contact.tel.saved;
+    savedContact.email.temp = this.state.contact.email.saved;
+    savedContact.location.temp = this.state.contact.location.saved;
+    savedContact.website.temp = this.state.contact.website.saved;
+    savedContact.completed = false;
+
+    this.setState({
+      edits: edits,
+      contact: savedContact,
     });
   }
 
@@ -417,6 +508,15 @@ class App extends Component {
               name={this.state.name.temp}
               editing={this.onNameEdit}
             />
+            <h3>Contact Info.</h3>
+            <ContactForm
+              submitting={this.onContactSubmit}
+              changing={this.handleContactChange}
+              editActive={this.state.edits.contact}
+              current={this.state.contact}
+              editing={this.onContactEdit}
+            />
+
             <h3>Personal Profile</h3>
             <ProfileForm
               completed={this.state.profile.saved}
@@ -438,6 +538,7 @@ class App extends Component {
               prevEdit={this.onPrevWorkEdit}
               saveEdit={this.onWorkEditSave}
             />
+            <h3>Education History</h3>
             <EducationForm
               length={this.state.educationHistory.length}
               changing={this.handleSchoolChange}
@@ -460,6 +561,7 @@ class App extends Component {
               <Work roles={this.state.workHistory} />
             </div>
             <div className="right-col">
+              <Contact current={this.state.contact} />
               <Education roles={this.state.educationHistory} />
             </div>
           </div>
