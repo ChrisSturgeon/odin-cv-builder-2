@@ -11,7 +11,6 @@ class PersonalForm extends Component {
             onChange={this.props.changing}
             type="text"
             id="nameInput"
-            placeholder="e.g. John Doe..."
             required
           ></input>
           <button type="submit">Save Edit</button>
@@ -32,7 +31,6 @@ class PersonalForm extends Component {
           onChange={this.props.changing}
           type="text"
           id="nameInput"
-          placeholder="e.g. John Doe..."
           required
         ></input>
         <button type="submit">Add</button>

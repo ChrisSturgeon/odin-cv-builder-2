@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../styles/Work.css';
 
 class Work extends Component {
   render() {
@@ -6,13 +7,14 @@ class Work extends Component {
       <ul>
         {this.props.roles.map((role) => {
           return (
-            <div key={role.id}>
-              <div>{role.company}</div>
-              <div>{role.position}</div>
-              <div>{role.from}</div>
-              <div>{role.to}</div>
+            <div className="work-div" key={role.id}>
+              <div className="headers">
+                {role.position} at {role.company}
+              </div>
+              <div className="headers">
+                {role.from} to {role.to}{' '}
+              </div>
               <div>{role.description}</div>
-              <div>{role.id}</div>
             </div>
           );
         })}

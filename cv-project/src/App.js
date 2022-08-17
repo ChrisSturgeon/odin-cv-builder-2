@@ -43,6 +43,8 @@ class App extends Component {
     this.onPrevEducationEdit = this.onPrevEducationEdit.bind(this);
     this.onEducationEditSave = this.onEducationEditSave.bind(this);
 
+    this.sampleData = this.sampleData.bind(this);
+
     this.state = {
       edits: {
         name: false,
@@ -493,11 +495,128 @@ class App extends Component {
     });
   }
 
+  sampleData() {
+    this.setState({
+      name: {
+        temp: '',
+        saved: 'Rick Astley',
+      },
+      contact: {
+        tel: {
+          temp: '',
+          saved: '01234 56789',
+        },
+        email: {
+          temp: '',
+          saved: 'rick@roll.com',
+        },
+        location: {
+          temp: '',
+          saved: 'Newton, Lancashire',
+        },
+        website: {
+          temp: '',
+          saved: 'www.rickastley.co.uk',
+        },
+        completed: false,
+      },
+      profile: {
+        temp: '',
+        saved:
+          "I am an energetic, ambitious person who has developed a mature and responsible approach to any task that I undertake, or situation that I am presented with. As a graduate with three years' experience in management, I am excellent in working with others to achieve a certain objective on time and with excellence. I also have an amazing singing voice.",
+      },
+      work: {
+        company: '',
+        position: '',
+        from: '',
+        to: '',
+        description: '',
+        id: uniqid(),
+      },
+      workHistory: [
+        {
+          company: 'Tesco PLC',
+          position: 'Floor Manager',
+          from: '2019',
+          to: 'present',
+          description:
+            'In charge of the area of the store where product is shopped by consumers. I help maintain the stock on the shelves and supervise the people who work in the grocery aisles. I assist in setting up merchandising displays and ensure they are are the right place on the floor plan.',
+          id: uniqid(),
+        },
+        {
+          company: 'Sainsburys',
+          position: 'Rotisserie cook',
+          from: '1995',
+          to: '2019',
+          description:
+            'Planned, prepared, and cooked rotisseriefood items to ensure the highest quality service and experience for customers. I helped keep the kitchen organized and running efficiently. I ensured proper food handling, sanitation and followed food storage procedures.',
+          id: uniqid(),
+        },
+        {
+          company: 'Safeway',
+          position: 'Shop cleaner',
+          from: '1980',
+          to: '1995',
+          description:
+            'Cleaned, stocked and supplied designated facility areas. Dusting, sweeping, vacuuming, mopping. Carried out deep cleaning and detailed cleaning tasks. Notifed management of deficiencies or repairs required.',
+          id: uniqid(),
+        },
+      ],
+      profileCounter: 0,
+      education: {
+        school: '',
+        level: '',
+        studied: '',
+        from: '',
+        to: '',
+        grade: '',
+        id: uniqid(),
+      },
+      educationHistory: [
+        {
+          school: 'MIT',
+          level: 'Undergraduate',
+          studied: 'Astrophysics',
+          from: '1992',
+          to: '1995',
+          grade: 'Distinction',
+          id: uniqid(),
+        },
+        {
+          school: 'Brooklands High',
+          level: 'High School',
+          studied: 'Maths',
+          from: '1990',
+          to: '1992',
+          grade: 'A*',
+          id: uniqid(),
+        },
+        {
+          school: 'Newton Primary',
+          level: 'Middle School',
+          studied: 'Everything',
+          from: '1982',
+          to: '1990',
+          grade: 'Nailed it',
+          id: uniqid(),
+        },
+      ],
+      educationCounter: 0,
+    });
+  }
+
   render() {
     return (
       <div className="wrapper">
         <div className="inputs">
-          <h1>CV Builder</h1>
+          <h1 className="page-title">CV Builder</h1>
+          <p>
+            Simply complete the fields to generate your new CV. Required fields
+            are marked with *.
+          </p>
+          <button className="sample-btn" onClick={this.sampleData}>
+            Click to load sample data
+          </button>
           <div className="all-inputs">
             <h3>Name</h3>
             <PersonalForm
@@ -556,12 +675,14 @@ class App extends Component {
           <div className="page">
             <div className="left-col">
               <Name name={this.state.name.saved} />
-              <h2>Profile</h2>
               <Profile text={this.state.profile.saved} />
+              <h3>Work History</h3>
               <Work roles={this.state.workHistory} />
             </div>
             <div className="right-col">
+              <h3>Contact</h3>
               <Contact current={this.state.contact} />
+              <h3>Education</h3>
               <Education roles={this.state.educationHistory} />
             </div>
           </div>

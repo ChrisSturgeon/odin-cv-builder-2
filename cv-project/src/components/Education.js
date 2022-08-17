@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../styles/Education.css';
 
 class Education extends Component {
   render() {
@@ -6,13 +7,15 @@ class Education extends Component {
       <ul>
         {this.props.roles.map((inst) => {
           return (
-            <div key={inst.id}>
-              <div>{inst.school}</div>
+            <div className="education-div" key={inst.id}>
+              <div>
+                {inst.studied} at {inst.school}
+              </div>
               <div>{inst.level}</div>
-              <div>{inst.from}</div>
-              <div>{inst.to}</div>
+              <div>
+                {inst.from} to {inst.to}
+              </div>
               <div>{inst.grade}</div>
-              <div>{inst.id}</div>
             </div>
           );
         })}
