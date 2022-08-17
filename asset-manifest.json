@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/%7Bodin-cv-builder-2%7D/static/css/main.7771ad9e.css",
-    "main.js": "/%7Bodin-cv-builder-2%7D/static/js/main.bf5db036.js",
-    "static/js/787.34a20539.chunk.js": "/%7Bodin-cv-builder-2%7D/static/js/787.34a20539.chunk.js",
-    "index.html": "/%7Bodin-cv-builder-2%7D/index.html",
-    "main.7771ad9e.css.map": "/%7Bodin-cv-builder-2%7D/static/css/main.7771ad9e.css.map",
-    "main.bf5db036.js.map": "/%7Bodin-cv-builder-2%7D/static/js/main.bf5db036.js.map",
-    "787.34a20539.chunk.js.map": "/%7Bodin-cv-builder-2%7D/static/js/787.34a20539.chunk.js.map"
+    "main.css": "/odin-cv-builder-2/static/css/main.7771ad9e.css",
+    "main.js": "/odin-cv-builder-2/static/js/main.26be6aa5.js",
+    "static/js/787.34a20539.chunk.js": "/odin-cv-builder-2/static/js/787.34a20539.chunk.js",
+    "index.html": "/odin-cv-builder-2/index.html",
+    "main.7771ad9e.css.map": "/odin-cv-builder-2/static/css/main.7771ad9e.css.map",
+    "main.26be6aa5.js.map": "/odin-cv-builder-2/static/js/main.26be6aa5.js.map",
+    "787.34a20539.chunk.js.map": "/odin-cv-builder-2/static/js/787.34a20539.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.7771ad9e.css",
-    "static/js/main.bf5db036.js"
+    "static/js/main.26be6aa5.js"
   ]
 }
